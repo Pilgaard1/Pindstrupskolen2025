@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <title>Teknologi</title>
+    
+
+  </head>
+    
+  <body>
+  <!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teknologi Vælger</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Montserrat:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #00ddeb, #ff3333, #8a2be2);
+            color: #fff;
+            display: flex;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 10%, transparent 10%);
+            background-size: 30px 30px;
+            opacity: 0.3;
+            z-index: -1;
+        }
+        #sidebar {
+            width: 35%;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(15px);
+            border-right: 2px solid rgba(255, 255, 255, 0.3);
+            overflow-y: auto;
+            padding: 25px;
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.2);
+            max-height: 100vh;
+            -webkit-overflow-scrolling: touch; 
+        }
+        #sidebar h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.5em;
+            margin: 0 0 25px;
+            color: #fff;
+            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+            animation: fadeInText 1s ease-in;
+        }
+        .tabs {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        .tab {
+            padding: 12px 25px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+        }
+        .tab.active {
+            background: linear-gradient(135deg, #3b82f6, #ff3333);
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.7);
+            transform: scale(1.05);
+        }
+        .tab:hover {
+            background: rgba(255, 255, 255, 0.4);
+            transform: translateY(-3px);
+        }
+        #equipment-tab {
+            min-height: 100%;
+        }
+        #equipment-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            min-height: 500px;
+        }
+        .equipment-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.05));
+            backdrop-filter: blur(12px);
+            border-radius: 15px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+        .equipment-item:hover {
+            transform: translateY(-5px) rotate(2deg);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+            border-color: #ff3333;
+        }
+        .equipment-item.active {
+            background: linear-gradient(145deg, #3b82f6, #ff3333);
+            box-shadow: 0 12px 30px rgba(59, 130, 246, 0.5);
+            border-color: #00ddeb;
+        }
+        .equipment-item img {
+            width: 130px;
+            height: 130px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+        }
+        .equipment-item img:hover {
+            transform: scale(1.1);
+        }
+        .equipment-item span {
+            font-size: 1.2em;
+            color: #fff;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        }
+        .equipment-item .status {
+            font-size: 0.95em;
+            margin-top: 8px;
+            color: #00ff99;
+            font-weight: 500;
+        }
+        .equipment-item.booked .status {
+            color: #ff4d4d;
+        }
+        .equipment-item .stock {
+            font-size: 0.95em;
+            margin-top: 8px;
+            color: #e0e0e0;
+            font-weight: 500;
+        }
+        #bookings-tab {
+            display: none;
+            min-height: 100%;
+        }
+        #bookings-table {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+        #bookings-table table {
+            width: 100%;
+            border-collapse: collapse;
+            color: #fff;
+            font-family: 'Poppins', sans-serif;
+        }
+        #bookings-table th, #bookings-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        #bookings-table th {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 1.1em;
+            color: #00ddeb;
+        }
+        #bookings-table button {
+            padding: 8px 15px;
+            background: linear-gradient(135deg, #ff4d4d, #cc0000);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px rgba(255, 77, 77, 0.5);
+        }
+        #bookings-table button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(255, 77, 77, 0.7);
+        }
+        #booking-form {
+            margin-top: 25px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+        }
+        #booking-form select, #booking-form input {
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            font-size: 1em;
+            width: 90%; 
+            display: block;
+            background: rgba(0, 0, 0, 0.6); 
+            color: #00ff99 !important;
+        }
+        #booking-form input::placeholder {
+            color: rgba(0, 255, 153, 0.6);
+        }
+        #booking-form input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(100%) sepia(100%) saturate(1000%) hue-rotate(120deg);
+            cursor: pointer;
+        }
+        #booking-form select option {
+            background: #222;
+            color: #00ff99;
+        }
+        #booking-form select:focus, #booking-form input:focus {
+            outline: none;
+            border-color: #00ddeb;
+            box-shadow: 0 0 10px rgba(0, 221, 235, 0.5);
+        }
+        #booking-form button.book-btn {
+            width: 95%;
+            margin-top: 10px;
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #3b82f6, #ff3333);
+            color: #fff;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+        }
+        #booking-form button.book-btn:hover {
+            background: linear-gradient(135deg, #ff3333, #3b82f6);
+            transform: scale(1.02);
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.7);
+        }
+        .confirmation {
+            color: #00ff99;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            margin: 15px 0;
+            min-height: 20px;
+        }
+        
+        .admin-controls {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.3);
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+        .admin-btn {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.2s;
+        }
+        .btn-export { background: #28a745; color: white; }
+        .btn-reset { background: #dc3545; color: white; }
+        .admin-btn:hover { transform: scale(1.05); opacity: 0.9; }
+
+        #content {
+            width: 65%;
+            padding: 35px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.05);
+            overflow-y: auto;
+            max-height: 100vh;
+            -webkit-overflow-scrolling: touch; 
+        }
+        #equipment-details {
+            text-align: left;
+            width: 100%;
+            max-width: 750px;
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
+            backdrop-filter: blur(15px);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            animation: fadeIn 0.7s ease-in;
+        }
+        #equipment-details h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.8em;
+            margin: 0.5em 0;
+            color: #fff;
+            font-weight: 700;
+            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        }
+        #equipment-details p {
+            font-size: 1.2em;
+            margin: 0.6em 0;
+            color: #e0e0e0;
+            line-height: 1.5;
+        }
+        #equipment-details img {
+            max-width: 280px;
+            height: auto;
+            border-radius: 12px;
+            margin: 15px 0;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+        }
+        #equipment-details iframe {
+            width: 100%;
+            max-width: 560px;
+            aspect-ratio: 16/9;
+            height: auto;
+            border-radius: 12px;
+            margin: 15px 0;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            border: none;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInText {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* --- UPDATED: iPad Optimization Media Query --- */
+        @media (max-width: 1024px) { 
+            body {
+                flex-direction: column;
+            }
+            
+            /* Sidebar moves to the top, forces stacked layout on Portrait iPad */
+            #sidebar {
+                width: 100%;
+                max-height: 40vh; 
+                border-right: none;
+                border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+                padding: 20px;
+            }
+
+            /* Content moves to the bottom */
+            #content {
+                width: 100%;
+                height: 60vh;
+                max-height: 60vh;
+                padding: 20px;
+            }
+
+            /* Make inputs full width and large enough to prevent iOS zooming */
+            #booking-form select, 
+            #booking-form input, 
+            #booking-form button.book-btn {
+                width: 100%;
+                font-size: 16px; 
+            }
+            
+            .tab {
+                padding: 15px 30px; 
+                font-size: 1.1em;
+            }
+
+            /* Adjust list height for stacked view */
+            #equipment-list {
+                min-height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="sidebar">
+        <h2>Teknologi Vælger</h2>
+        <div class="tabs">
+            <div class="tab active" onclick="showTab('equipment')">Udstyr</div>
+            <div class="tab" onclick="showTab('bookings')">Bookinger</div>
+        </div>
+        
+        <div id="equipment-tab">
+            <div id="equipment-list"></div>
+        </div>
+        
+        <div id="bookings-tab">
+            <div id="bookings-table"></div>
+            
+            <div id="booking-form">
+                <h3>Book udstyr</h3>
+                <select id="equipment-select">
+                    <option value="">Vælg udstyr</option>
+                </select>
+                <input type="text" id="booker-name" placeholder="Dit navn (F.eks. Anders 4.B)" required>
+                <input type="number" id="booking-quantity" placeholder="Antal" min="1" required>
+                <input type="date" id="booking-date" required>
+                <button class="book-btn" onclick="bookEquipment()">BOOK NU</button>
+                <div id="confirmation" class="confirmation"></div>
+            </div>
+
+            <div class="admin-controls">
+                <button class="admin-btn btn-export" onclick="exportToCSV()">Download Excel/CSV</button>
+                <button class="admin-btn btn-reset" onclick="resetSystem()">Nulstil System</button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="content">
+        <div id="equipment-details">
+            <p>Vælg et udstyr i menuen for at se detaljer.</p>
+        </div>
+    </div>
+
+    <script>
+        // --- Makey Makey stock changed to 3 ---
+        const equipmentList = [
+            { 
+                name: "LEGO Spike Prime", 
+                description: "Et dynamisk STEAM-læringsværktøj designet til 6.-8. klasse. Kombinerer farverige LEGO-elementer med Scratch-baseret programmering. Sensorer, motorer og intelligent hub.", 
+                imageUrl: "https://www.lekolar.dk/globalassets/inriver/resources/130606_116769.jpg",
+                videoId: "3zVadn_7l6o",
+                stock: 5,
+                task: "Byg en simpel bil og programmer den til at køre fremad i 5 sekunder."
+            },
+            { 
+                name: "Makey Makey", 
+                description: "Gør verden til en controller! Forbind hverdagsgenstande som frugt eller papir til computeren for at styre spil og musik.", 
+                imageUrl: "https://www.lekolar.dk/globalassets/inriver/resources/56659_067837.jpg",
+                videoId: "rfQqh7iCcOU",
+                stock: 3, 
+                task: "Lav et 'frugt-piano' ved at forbinde bananer til Makey Makey."
+            },
+            { 
+                name: "Green kasse", 
+                description: "Bærbar Green Screen kasse til mindre optagelser eller stop motion. Indeholder lys, stativ og baggrund.", 
+                imageUrl: "https://i.imgur.com/8Qj9N3Y.png", 
+                videoId: "wJ8d4xG3-O0", 
+                stock: 4, 
+                task: "Lav en kort video, hvor baggrunden er skiftet ud med et billede fra Paris ved hjælp af chroma key."
+            },
+            { 
+                name: "LEGO Spike Essentials", 
+                description: "Begyndervenlig udgave af Spike Prime til 4.-6. klasse. Perfekt til små robotter og naturfags-projekter.", 
+                imageUrl: "https://www.lego.com/cdn/cs/set/assets/blt0d31c588b8d182ae/45345.jpg?fit=bounds&format=jpg&quality=80&width=1500&height=1500&dpr=1",
+                videoId: "kJ9L8LM8g4I",
+                stock: 5,
+                task: "Byg en vindmølle der drejer når du klapper i hænderne."
+            },
+            { 
+                name: "Blue-Bots", 
+                description: "Sød og programmerbar robot til 3-7 år. Lær sekvenser og retninger ved at trykke på knapperne på ryggen.", 
+                imageUrl: "https://www.lekolar.dk/globalassets/inriver/resources/56611_49107.jpg",
+                videoId: "8B4i0q9W2l4",
+                stock: 6,
+                task: "Lav en bane på gulvet og få Blue-Bot til at køre igennem den."
+            }
+        ];
+
+        let bookings = JSON.parse(localStorage.getItem('bookings')) || {};
+
+        function getAvailableStock(equipmentName) {
+            const equipment = equipmentList.find(e => e.name === equipmentName);
+            if (!equipment) return 0;
+            const bookingList = Array.isArray(bookings[equipmentName]) ? bookings[equipmentName] : [];
+            const bookedQuantity = bookingList.reduce((sum, booking) => sum + (booking.quantity || 0), 0);
+            return equipment.stock - bookedQuantity;
+        }
+
+        function initDatepicker() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('booking-date').setAttribute('min', today);
+        }
+
+        const equipmentListDiv = document.getElementById('equipment-list');
+        function renderEquipmentList() {
+            equipmentListDiv.innerHTML = '';
+            equipmentList.forEach((equipment, index) => {
+                const availableStock = getAvailableStock(equipment.name);
+                const item = document.createElement('div');
+                item.className = `equipment-item ${availableStock === 0 ? 'booked' : ''}`;
+                item.innerHTML = `
+                    <img src="${equipment.imageUrl}" alt="${equipment.name}">
+                    <span>${equipment.name}</span>
+                    <div class="status">${availableStock === 0 ? 'Udlånt' : 'Ledig'}</div>
+                    <div class="stock">Lager: ${availableStock}</div>
+                `;
+                item.onclick = () => showDetails(index);
+                equipmentListDiv.appendChild(item);
+            });
+        }
+
+        const bookingsTableDiv = document.getElementById('bookings-table');
+        const equipmentSelect = document.getElementById('equipment-select');
+        
+        function renderBookings() {
+            equipmentSelect.innerHTML = '<option value="">Vælg udstyr</option>';
+            equipmentList.forEach(equipment => {
+                const availableStock = getAvailableStock(equipment.name);
+                if (availableStock > 0) {
+                    const option = document.createElement('option');
+                    option.value = equipment.name;
+                    option.textContent = `${equipment.name} (Lager: ${availableStock})`;
+                    equipmentSelect.appendChild(option);
+                }
+            });
+
+            const hasBookings = Object.keys(bookings).length > 0;
+            bookingsTableDiv.innerHTML = `
+                <table>
+                    <tr>
+                        <th>Udstyr</th>
+                        <th>Booket af</th>
+                        <th>Dato</th>
+                        <th>Antal</th>
+                        <th>Handling</th>
+                    </tr>
+                    ${!hasBookings ? '<tr><td colspan="5" style="text-align:center; padding:20px;">Ingen bookinger i systemet.</td></tr>' : ''}
+                    ${Object.entries(bookings).flatMap(([name, bookingList]) => 
+                        (Array.isArray(bookingList) ? bookingList : []).map((booking, index) => `
+                            <tr>
+                                <td>${name}</td>
+                                <td>${booking.bookedBy}</td>
+                                <td>${booking.date}</td>
+                                <td>${booking.quantity || 1}</td>
+                                <td><button onclick="cancelBooking('${name}', ${index})">Slet</button></td>
+                            </tr>
+                        `)
+                    ).join('')}
+                </table>
+            `;
+        }
+
+        function showDetails(index) {
+            const equipment = equipmentList[index];
+            const detailsDiv = document.getElementById('equipment-details');
+            const availableStock = getAvailableStock(equipment.name);
+            const isBooked = availableStock === 0;
+
+            detailsDiv.innerHTML = `
+                <h1>${equipment.name}</h1>
+                <img src="${equipment.imageUrl}" alt="${equipment.name}">
+                <p><strong>Beskrivelse:</strong> ${equipment.description}</p>
+                <p><strong>Status:</strong> ${isBooked ? 'Udlånt' : 'Ledig'} (${availableStock} tilbage)</p>
+                <p><strong>Opgave:</strong> ${equipment.task}</p>
+                <h3>Video Guide</h3>
+                <iframe src="https://www.youtube.com/embed/${equipment.videoId}?rel=0" allowfullscreen></iframe>
+            `;
+
+            document.querySelectorAll('.equipment-item').forEach(item => item.classList.remove('active'));
+            equipmentListDiv.children[index].classList.add('active');
+        }
+
+        function showTab(tabName) {
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.getElementById('equipment-tab').style.display = 'none';
+            document.getElementById('bookings-tab').style.display = 'none';
+            
+            if (tabName === 'equipment') {
+                document.getElementById('equipment-tab').style.display = 'block';
+                document.querySelector('.tab[onclick="showTab(\'equipment\')"]').classList.add('active');
+                renderEquipmentList();
+            } else {
+                document.getElementById('bookings-tab').style.display = 'block';
+                document.querySelector('.tab[onclick="showTab(\'bookings\')"]').classList.add('active');
+                renderBookings();
+                initDatepicker(); 
+            }
+        }
+
+        function bookEquipment() {
+            const equipmentName = document.getElementById('equipment-select').value;
+            const bookerName = document.getElementById('booker-name').value;
+            const bookingQuantity = parseInt(document.getElementById('booking-quantity').value);
+            const bookingDate = document.getElementById('booking-date').value;
+            const confirmationDiv = document.getElementById('confirmation');
+
+            if (!equipmentName || !bookerName || !bookingDate || !bookingQuantity) {
+                alert('Udfyld venligst alle felter.');
+                return;
+            }
+
+            const selectedDate = new Date(bookingDate);
+            const today = new Date();
+            today.setHours(0,0,0,0);
+            if(selectedDate < today) {
+                alert('Du kan ikke booke udstyr tilbage i tiden.');
+                return;
+            }
+
+            const availableStock = getAvailableStock(equipmentName);
+            if (bookingQuantity <= 0) {
+                alert('Antal skal være mindst 1.');
+                return;
+            }
+            if (bookingQuantity > availableStock) {
+                alert(`Der er kun ${availableStock} stk. tilbage af ${equipmentName}.`);
+                return;
+            }
+
+            if (!Array.isArray(bookings[equipmentName])) {
+                bookings[equipmentName] = [];
+            }
+            bookings[equipmentName].push({ bookedBy: bookerName, date: bookingDate, quantity: bookingQuantity });
+            localStorage.setItem('bookings', JSON.stringify(bookings));
+
+            renderBookings();
+            renderEquipmentList();
+            
+            confirmationDiv.innerText = `Tak, ${bookerName}. Du har booket ${bookingQuantity}x ${equipmentName}!`;
+            
+            document.getElementById('booking-quantity').value = '';
+            document.getElementById('booker-name').value = '';
+        }
+
+        function cancelBooking(equipmentName, bookingIndex) {
+            if (confirm('Er du sikker på, at du vil slette denne booking?')) {
+                if (Array.isArray(bookings[equipmentName])) {
+                    bookings[equipmentName].splice(bookingIndex, 1);
+                    if (bookings[equipmentName].length === 0) delete bookings[equipmentName];
+                    localStorage.setItem('bookings', JSON.stringify(bookings));
+                    renderBookings();
+                    renderEquipmentList();
+                    document.getElementById('confirmation').innerText = 'Booking slettet.';
+                }
+            }
+        }
+
+        function exportToCSV() {
+            let csvContent = "data:text/csv;charset=utf-8,Udstyr,Booket af,Dato,Antal\n";
+            
+            Object.entries(bookings).forEach(([name, bookingList]) => {
+                bookingList.forEach(b => {
+                    csvContent += `${name},${b.bookedBy},${b.date},${b.quantity}\n`;
+                });
+            });
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "teknologi_bookinger.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function resetSystem() {
+            if(confirm("ADVARSEL: Dette vil slette ALLE bookinger permanent. Er du sikker?")) {
+                localStorage.removeItem('bookings');
+                bookings = {};
+                renderBookings();
+                renderEquipmentList();
+                alert("Systemet er nulstillet.");
+            }
+        }
+
+        showTab('equipment');
+        initDatepicker();
+    </script>
+</body>
+</html>
+    
+  </body>
+  
+</html>
